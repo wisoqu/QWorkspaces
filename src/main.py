@@ -5,17 +5,15 @@ from screens.home import home_screen
 
 
 def main(page: ft.Page):
-    # Global page configuration.
     page.title = "QWorkspaces"
     page.padding = 24
-    page.theme_mode = ft.ThemeMode.LIGHT
+    page.theme_mode = ft.ThemeMode.DARK
 
     def route_change(e=None):
-        # Rebuild the visible screens when the route changes.
         page.views.clear()
         page.views.append(hello_screen(page))
 
-        if page.route == "/home":
+        if page.route == "/home": 
             page.views.append(home_screen(page))
 
         page.update()

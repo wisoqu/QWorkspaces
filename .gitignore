@@ -1,23 +1,46 @@
 venv/
 .venv/
+env/
 
 __pycache__/
 *.py[cod]
 *$py.class
+.Python
 
 .env
 .env.*
+!.env.example
+.envrc
+*.local
 
 *.db
 *.sqlite
 *.sqlite3
+*.log
+*.pid
+
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+secrets.*
 
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
 
 build/
 dist/
+*.egg-info/
+.eggs/
 
 .idea/
 .vscode/
+.DS_Store
+Thumbs.db
