@@ -1,0 +1,90 @@
+<svg width="1200" height="560" viewBox="0 0 1200 560" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="80" y1="40" x2="1120" y2="520" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#08111F"/>
+      <stop offset="0.55" stop-color="#0E223A"/>
+      <stop offset="1" stop-color="#103A57"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#13273D"/>
+      <stop offset="1" stop-color="#0A1728"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#59D6FF"/>
+      <stop offset="1" stop-color="#42F5B9"/>
+    </linearGradient>
+    <linearGradient id="accentWarm" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#FFD66B"/>
+      <stop offset="1" stop-color="#FF8A5B"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="22" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="560" rx="32" fill="url(#bg)"/>
+  <circle cx="1030" cy="88" r="140" fill="#37D7C9" opacity="0.08"/>
+  <circle cx="165" cy="485" r="150" fill="#3BA4FF" opacity="0.08"/>
+  <circle cx="782" cy="482" r="110" fill="#FFAF68" opacity="0.06"/>
+
+  <rect x="60" y="58" width="360" height="34" rx="17" fill="#0C1D31" stroke="#20415E"/>
+  <text x="84" y="80" fill="#B7CAE0" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="600">PERSONAL INTELLIGENT WORKSPACE</text>
+
+  <text x="60" y="166" fill="white" font-family="Segoe UI, Arial, sans-serif" font-size="62" font-weight="700">QWorkspaces</text>
+  <text x="60" y="222" fill="#C6D7E7" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="500">
+    A product vision for a personal workspace with an AI assistant,
+  </text>
+  <text x="60" y="258" fill="#C6D7E7" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="500">
+    contextual memory, planning intelligence, and local-first MVP execution.
+  </text>
+
+  <rect x="60" y="314" width="184" height="54" rx="27" fill="url(#accent)"/>
+  <text x="101" y="348" fill="#04111B" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700">LOCAL MVP FIRST</text>
+
+  <rect x="258" y="314" width="224" height="54" rx="27" fill="#0E2135" stroke="#2B4E6D"/>
+  <text x="297" y="348" fill="#D7E5F2" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700">AI-NATIVE PRODUCT</text>
+
+  <rect x="552" y="74" width="584" height="412" rx="28" fill="#07111C" opacity="0.68" stroke="#214765"/>
+
+  <rect x="586" y="108" width="180" height="148" rx="22" fill="url(#panel)" stroke="#2A577A"/>
+  <rect x="606" y="128" width="74" height="14" rx="7" fill="#274964"/>
+  <rect x="606" y="158" width="120" height="18" rx="9" fill="url(#accent)"/>
+  <rect x="606" y="190" width="136" height="10" rx="5" fill="#476682"/>
+  <rect x="606" y="212" width="104" height="10" rx="5" fill="#2E4F6A"/>
+  <text x="606" y="238" fill="#D9E8F2" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700">Calendar Sync</text>
+
+  <rect x="778" y="108" width="324" height="148" rx="22" fill="url(#panel)" stroke="#2A577A"/>
+  <rect x="804" y="136" width="120" height="12" rx="6" fill="#355471"/>
+  <rect x="804" y="166" width="258" height="16" rx="8" fill="url(#accentWarm)"/>
+  <rect x="804" y="196" width="226" height="10" rx="5" fill="#486A86"/>
+  <rect x="804" y="218" width="184" height="10" rx="5" fill="#2D4F6A"/>
+  <text x="804" y="240" fill="#F3F7FB" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700">Memory + Context Engine</text>
+
+  <rect x="586" y="274" width="240" height="176" rx="22" fill="url(#panel)" stroke="#2A577A"/>
+  <circle cx="635" cy="329" r="22" fill="#173148"/>
+  <path d="M624 331C624 324.373 629.373 319 636 319H669C675.627 319 681 324.373 681 331V332C681 338.627 675.627 344 669 344H636C629.373 344 624 338.627 624 332V331Z" fill="url(#accent)"/>
+  <rect x="624" y="360" width="154" height="12" rx="6" fill="#4E6E89"/>
+  <rect x="624" y="384" width="130" height="12" rx="6" fill="#2B4B66"/>
+  <rect x="624" y="408" width="112" height="12" rx="6" fill="#203B53"/>
+  <text x="624" y="432" fill="#EAF4FB" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700">Assistant Dialogue</text>
+
+  <rect x="842" y="274" width="260" height="176" rx="22" fill="url(#panel)" stroke="#2A577A"/>
+  <path d="M872 320H970" stroke="#61D4FF" stroke-width="8" stroke-linecap="round" filter="url(#glow)">
+    <animate attributeName="stroke-dasharray" values="0 98;98 0;0 98" dur="4s" repeatCount="indefinite"/>
+  </path>
+  <path d="M872 352H1030" stroke="#44F0BA" stroke-width="8" stroke-linecap="round" filter="url(#glow)">
+    <animate attributeName="stroke-dasharray" values="0 158;158 0;0 158" dur="5.5s" repeatCount="indefinite"/>
+  </path>
+  <path d="M872 384H998" stroke="#FFB86B" stroke-width="8" stroke-linecap="round" filter="url(#glow)">
+    <animate attributeName="stroke-dasharray" values="0 126;126 0;0 126" dur="4.5s" repeatCount="indefinite"/>
+  </path>
+  <text x="872" y="430" fill="#F6FAFD" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700">Planning Intelligence</text>
+
+  <text x="60" y="458" fill="#8FB2CB" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="600">CURRENT STAGE</text>
+  <text x="60" y="490" fill="#FFFFFF" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">Pre-MVP / product foundation</text>
+  <text x="60" y="522" fill="#AFC8DA" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="500">Interface scaffold today. Intelligent personal workspace tomorrow.</text>
+</svg>
