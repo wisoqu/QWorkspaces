@@ -26,7 +26,7 @@ from config import (
     SPACING_SM,
 )
 from database import authenticate_user, get_user_by_id, register_user, start_user_session
-from schemas import validate_user_email, validate_user_name, validate_user_password
+from schemas import validate_user_email, validate_user_password
 from utils.session import set_current_user
 
 
@@ -54,16 +54,6 @@ def hello_screen(page: ft.Page) -> ft.View:
         size=FONT_SIZE_BASE,
         color=COLOR_TEXT_SECONDARY,
         text_align=ft.TextAlign.CENTER,
-    )
-
-    user_name = ft.TextField(
-        label="Login",
-        width=320,
-        visible=False,
-        border_radius=CARD_BORDER_RADIUS,
-        filled=True,
-        bgcolor=COLOR_CARD_BG,
-        color=COLOR_TEXT_PRIMARY,
     )
 
     email_field = ft.TextField(
@@ -111,7 +101,6 @@ def hello_screen(page: ft.Page) -> ft.View:
 
     def set_mode(register_mode: bool, update_page: bool = True) -> None:
         is_register_mode["value"] = register_mode
-        user_name.visible = register_mode
         confirm_password_field.visible = register_mode
         submit_button.content = "Create account" if register_mode else "Sign in"
         message.value = "Create a new account" if register_mode else "Sign in to continue"
@@ -130,9 +119,9 @@ def hello_screen(page: ft.Page) -> ft.View:
             page.update()
 
     def complete_auth(user: dict) -> None:
-        set_current_user(page, user["id"], user["login"])
+        set_current_user(page, user["id"], user["email"])
         start_user_session(user["id"])
-        message.value = f"Welcome, {user['login']}!"
+        message.value = f"Welcome, {user['email']}!"
         message.color = COLOR_TEXT_SUCCESS
         page.go("/home")
 
@@ -155,14 +144,6 @@ def hello_screen(page: ft.Page) -> ft.View:
             return
 
         if is_register_mode["value"]:
-            login_value = (user_name.value or "").strip()
-            validated_name, name_error = validate_user_name(login_value)
-            if name_error:
-                message.value = name_error
-                message.color = COLOR_TEXT_ERROR
-                page.update()
-                return
-
             if validated_password != (confirm_password_field.value or ""):
                 message.value = "Passwords do not match"
                 message.color = COLOR_TEXT_ERROR
@@ -171,7 +152,6 @@ def hello_screen(page: ft.Page) -> ft.View:
 
             try:
                 user_id = register_user(
-                    login=validated_name,
                     email=normalized_email,
                     password=validated_password,
                 )
@@ -216,7 +196,6 @@ def hello_screen(page: ft.Page) -> ft.View:
                 heading,
                 subtitle,
                 ft.Container(height=24),
-                user_name,
                 email_field,
                 password_field,
                 confirm_password_field,

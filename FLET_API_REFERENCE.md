@@ -26,10 +26,10 @@ This contract is strict:
 - `page.pop_dialog()`
 
 ### Session
-- `page.session.get("key")`
-- `page.session.set("key", value)`
-- `page.session.contains_key("key")`
-- `page.session.remove("key")`
+- `page.session.store.get("key")`
+- `page.session.store.set("key", value)`
+- `page.session.store.contains_key("key")`
+- `page.session.store.remove("key")`
 
 ### Controls
 - `ft.run(main)`
@@ -83,6 +83,10 @@ This contract is strict:
 - `del page.session["key"]`
 - `"key" in page.session`
 - `page.session.get("key", default)`
+- `page.session.get("key")`
+- `page.session.set("key", value)`
+- `page.session.contains_key("key")`
+- `page.session.remove("key")`
 
 ### Buttons
 - `ft.ElevatedButton(...)`
@@ -101,4 +105,5 @@ This contract is strict:
 
 - In this project, button text is passed as the first positional argument or through `content`.
 - In this project, dialogs are opened with `page.show_dialog()` and closed with `page.pop_dialog()`.
-- In this project, session access is only through `get/set/contains_key/remove`.
+- In `flet 0.82.2`, session data access goes through `page.session.store`.
+- The project keeps all session reads and writes inside `src/utils/session.py` to avoid API drift leaking into screens.

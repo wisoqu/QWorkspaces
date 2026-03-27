@@ -10,21 +10,23 @@ from uuid import uuid4
 sys.path.insert(0, "src")
 
 
-class FakeSession:
+class FakeSessionStore:
     def __init__(self):
         self._data = {}
 
-    def get(self, key):
-        return self._data.get(key)
+    def get(self, key, default=None):
+        return self._data.get(key, default)
 
     def set(self, key, value):
         self._data[key] = value
 
-    def contains_key(self, key):
-        return key in self._data
-
     def remove(self, key):
         self._data.pop(key, None)
+
+
+class FakeSession:
+    def __init__(self):
+        self.store = FakeSessionStore()
 
 
 class FakePage:
@@ -80,10 +82,10 @@ class TestAppImports:
         assert schemas.UserName is not None
 
     def test_import_database(self):
-        from src.database import create_user, get_user_by_login
+        from src.database import create_user, get_user_by_email
 
         assert create_user is not None
-        assert get_user_by_login is not None
+        assert get_user_by_email is not None
 
     def test_import_components(self):
         from src.components import create_empty_state, create_note_card, create_task_card
@@ -192,7 +194,6 @@ class TestAppStartup:
             page = FakePage()
             main(page)
 
-            assert page.route == "/"
             assert len(page.views) == 1
             assert page.views[0].route == "/"
         finally:
@@ -210,20 +211,20 @@ class TestAppStartup:
         try:
             initialize_database()
             user_id = create_user(
-                login="alice",
                 email="alice@example.com",
                 password_hash="hash",
             )
             save_active_session(user_id, "token-123")
 
             page = FakePage()
+            page.route = "/"  # Имитируем начальную маршрутизацию
             main(page)
 
             assert page.route == "/home"
             assert len(page.views) == 1
             assert page.views[0].route == "/home"
             assert not isinstance(page.views[0].controls[0].controls[1], ft.View)
-            assert page.session.get("user_id") == user_id
-            assert page.session.get("user_name") == "alice"
+            assert page.session.store.get("user_id") == user_id
+            assert page.session.store.get("user_name") == "alice@example.com"
         finally:
             shutil.rmtree(temp_dir, ignore_errors=True)

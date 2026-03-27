@@ -34,15 +34,15 @@ def test_db(monkeypatch):
     temp_dir.mkdir(parents=True, exist_ok=True)
     database_path = temp_dir / "test_qworkspaces.db"
     monkeypatch.setenv("QWORKSPACES_DB_PATH", str(database_path))
-    
+
     initialize_database()
-    
+
     # Создаем тестового пользователя
-    user_id = create_user(login="testuser", email="test@test.com", password_hash="hash")
+    user_id = create_user(email="test@test.com", password_hash="hash")
     save_active_session(user_id, "token")
-    
+
     yield {"db_path": database_path, "user_id": user_id}
-    
+
     # Cleanup
     import shutil
     shutil.rmtree(temp_dir, ignore_errors=True)

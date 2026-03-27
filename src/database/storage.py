@@ -51,8 +51,7 @@ def initialize_database() -> Path:
             """
             CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                login TEXT NOT NULL COLLATE NOCASE UNIQUE,
-                email TEXT COLLATE NOCASE UNIQUE,
+                email TEXT NOT NULL COLLATE NOCASE UNIQUE,
                 password_hash TEXT NOT NULL,
                 role TEXT NOT NULL DEFAULT 'free',
                 subscription_plan TEXT NOT NULL DEFAULT 'free',
@@ -109,23 +108,20 @@ def initialize_database() -> Path:
 
 
 def create_user(
-    login: str,
+    email: str,
     password_hash: str,
-    email: str | None = None,
     role: str = "free",
     subscription_plan: str = "free",
     company_name: str | None = None,
 ) -> int:
     now = _utc_now()
-    normalized_login = login.strip()
-    normalized_email = _normalize_email(email) if email else None
+    normalized_email = _normalize_email(email)
 
     with get_connection() as connection:
         try:
             cursor = connection.execute(
                 """
                 INSERT INTO users (
-                    login,
                     email,
                     password_hash,
                     role,
@@ -134,10 +130,9 @@ def create_user(
                     created_at,
                     updated_at
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
-                    normalized_login,
                     normalized_email,
                     password_hash,
                     role,
@@ -149,10 +144,8 @@ def create_user(
             )
         except sqlite3.IntegrityError as error:
             message = str(error).lower()
-            if "users.login" in message:
-                raise ValueError("User with this login already exists.") from error
             if "users.email" in message:
-                raise ValueError("User with this email already exists.") from error
+                raise ValueError("Пользователь с таким email уже существует")
             raise
 
     return int(cursor.lastrowid)
@@ -188,7 +181,6 @@ def verify_password(password: str, stored_password_hash: str) -> bool:
 
 
 def register_user(
-    login: str,
     email: str,
     password: str,
     role: str = "free",
@@ -196,23 +188,12 @@ def register_user(
     company_name: str | None = None,
 ) -> int:
     return create_user(
-        login=login,
         email=email,
         password_hash=hash_password(password),
         role=role,
         subscription_plan=subscription_plan,
         company_name=company_name,
     )
-
-
-def get_user_by_login(login: str) -> dict | None:
-    with get_connection() as connection:
-        row = connection.execute(
-            "SELECT * FROM users WHERE login = ? AND is_deleted = 0",
-            (login.strip(),),
-        ).fetchone()
-
-    return _row_to_dict(row)
 
 
 def get_user_by_email(email: str) -> dict | None:
@@ -331,7 +312,6 @@ def get_active_session() -> dict | None:
                 app_session.created_at,
                 app_session.updated_at,
                 app_session.expires_at,
-                users.login,
                 users.email,
                 users.role,
                 users.subscription_plan,

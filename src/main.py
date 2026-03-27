@@ -63,7 +63,7 @@ def main(page: ft.Page):
             clear_current_user(page)
             return False
 
-        user_name = active_session.get("login") or active_session.get("email") or "User"
+        user_name = active_session.get("email") or "User"
         set_current_user(page, active_session["user_id"], user_name)
         return True
 
@@ -184,10 +184,9 @@ def main(page: ft.Page):
 
     page.on_route_change = route_change
     page.on_view_pop = view_pop
-    
-    # Инициализируем маршрут
-    page.views.append(hello_screen(page))
-    page.update()
+
+    # Инициализируем маршрут через route_change
+    route_change(type("RouteChangeEvent", (), {"route": page.route or "/"})())
 
 if __name__ == "__main__":
     ft.run(main)

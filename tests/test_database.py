@@ -13,7 +13,6 @@ from database.storage import (
     create_user,
     get_active_session,
     get_user_by_email,
-    get_user_by_login,
     hash_password,
     initialize_database,
     register_user,
@@ -42,15 +41,14 @@ def test_initialize_database_creates_file_and_tables(isolated_database):
     assert database_path.exists()
 
 
-def test_create_user_and_fetch_by_login(isolated_database):
+def test_create_user_and_fetch_by_email(isolated_database):
     initialize_database()
 
     user_id = create_user(
-        login="alice",
         email="alice@example.com",
         password_hash="hashed-password",
     )
-    user = get_user_by_login("alice")
+    user = get_user_by_email("alice@example.com")
 
     assert user_id > 0
     assert user is not None
@@ -60,24 +58,24 @@ def test_create_user_and_fetch_by_login(isolated_database):
     assert user["subscription_plan"] == "free"
 
 
-def test_create_user_rejects_duplicate_login(isolated_database):
+def test_create_user_rejects_duplicate_email(isolated_database):
     initialize_database()
-    create_user(login="alice", email="alice@example.com", password_hash="hash-1")
+    create_user(email="alice@example.com", password_hash="hash-1")
 
-    with pytest.raises(ValueError, match="login"):
-        create_user(login="alice", email="other@example.com", password_hash="hash-2")
+    with pytest.raises(ValueError, match="email"):
+        create_user(email="alice@example.com", password_hash="hash-2")
 
 
 def test_save_and_clear_active_session(isolated_database):
     initialize_database()
-    user_id = create_user(login="bob", email="bob@example.com", password_hash="hash")
+    user_id = create_user(email="bob@example.com", password_hash="hash")
 
     save_active_session(user_id=user_id, session_token="token-123")
     session = get_active_session()
 
     assert session is not None
     assert session["user_id"] == user_id
-    assert session["login"] == "bob"
+    assert session["email"] == "bob@example.com"
 
     clear_active_session()
 
@@ -86,12 +84,12 @@ def test_save_and_clear_active_session(isolated_database):
 
 def test_soft_delete_user_marks_user_deleted_and_clears_session(isolated_database):
     initialize_database()
-    user_id = create_user(login="carol", email="carol@example.com", password_hash="hash")
+    user_id = create_user(email="carol@example.com", password_hash="hash")
     save_active_session(user_id=user_id, session_token="token-456")
     update_last_login(user_id)
 
     soft_delete_user(user_id)
-    user = get_user_by_login("carol")
+    user = get_user_by_email("carol@example.com")
     session = get_active_session()
 
     assert user is None
@@ -111,7 +109,6 @@ def test_register_user_hashes_password_and_authenticates(isolated_database):
     initialize_database()
 
     user_id = register_user(
-        login="alice",
         email="Alice@Example.com",
         password="strongpass123",
     )
@@ -128,14 +125,14 @@ def test_register_user_hashes_password_and_authenticates(isolated_database):
 
 def test_authenticate_user_rejects_invalid_password(isolated_database):
     initialize_database()
-    register_user(login="alice", email="alice@example.com", password="strongpass123")
+    register_user(email="alice@example.com", password="strongpass123")
 
     assert authenticate_user("alice@example.com", "wrongpass123") is None
 
 
 def test_start_user_session_saves_active_session(isolated_database):
     initialize_database()
-    user_id = create_user(login="bob", email="bob@example.com", password_hash="hash")
+    user_id = create_user(email="bob@example.com", password_hash="hash")
 
     session_token = start_user_session(user_id)
     session = get_active_session()

@@ -18,23 +18,27 @@ from utils.session import (
 )
 
 
-class FakeSession:
+class FakeSessionStore:
     """Фейковая сессия для тестов."""
 
     def __init__(self):
         self._data = {}
 
-    def get(self, key):
-        return self._data.get(key)
+    def get(self, key, default=None):
+        return self._data.get(key, default)
 
     def set(self, key, value):
         self._data[key] = value
 
-    def contains_key(self, key):
-        return key in self._data
-
     def remove(self, key):
         self._data.pop(key, None)
+
+
+class FakeSession:
+    """Фейковая оболочка Flet session c session.store."""
+
+    def __init__(self):
+        self.store = FakeSessionStore()
 
 
 class FakePage:
@@ -66,12 +70,12 @@ class TestSessionUtils:
         page = FakePage()
         set_current_user(page, 42, "TestUser")
 
-        assert page.session.get("user_id") == 42
-        assert page.session.get("user_name") == "TestUser"
+        assert page.session.store.get("user_id") == 42
+        assert page.session.store.get("user_name") == "TestUser"
 
     def test_get_current_user_id(self, test_db):
         page = FakePage()
-        page.session.set("user_id", 123)
+        page.session.store.set("user_id", 123)
 
         assert get_current_user_id(page) == 123
 
@@ -82,7 +86,7 @@ class TestSessionUtils:
 
     def test_get_current_user_name(self, test_db):
         page = FakePage()
-        page.session.set("user_name", "Alice")
+        page.session.store.set("user_name", "Alice")
 
         assert get_current_user_name(page) == "Alice"
 
@@ -97,8 +101,8 @@ class TestSessionUtils:
 
         clear_current_user(page)
 
-        assert page.session.get("user_id") is None
-        assert page.session.get("user_name") is None
+        assert page.session.store.get("user_id") is None
+        assert page.session.store.get("user_name") is None
 
     def test_is_authenticated(self, test_db):
         page = FakePage()
