@@ -1,7 +1,6 @@
 """Главная страница с отдельными блоками задач, заметок и панели ассистента."""
 import flet as ft
 
-from _imports import *  # noqa: F401,F403
 from config import (
     AGENT_PANEL_WIDTH,
     CARD_BORDER_RADIUS,

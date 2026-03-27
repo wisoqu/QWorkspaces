@@ -1,7 +1,6 @@
 """Список заметок."""
 import flet as ft
 
-from _imports import *  # noqa: F401,F403
 from components import create_empty_state, create_note_card
 from database import get_notes
 from screens.notes.note_form import note_form_dialog

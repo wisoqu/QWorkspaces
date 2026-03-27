@@ -1,9 +1,6 @@
 """AI агент - чат с ассистентом."""
 import flet as ft
 
-from _imports import *  # noqa: F401,F403
-
-
 def agent_screen(page: ft.Page) -> ft.View:
     """Экран AI-агента."""
     chat_column = ft.Column(spacing=12, height=400, scroll=ft.ScrollMode.AUTO)

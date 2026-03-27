@@ -1,7 +1,6 @@
 """Форма задачи."""
 import flet as ft
 
-from _imports import *  # noqa: F401,F403
 from components import (
     create_cancel_button,
     create_delete_button,

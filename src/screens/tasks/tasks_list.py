@@ -1,7 +1,6 @@
 """Список задач."""
 import flet as ft
 
-from _imports import *  # noqa: F401,F403
 from components import create_empty_state, create_task_card
 from database import get_tasks
 from screens.tasks.task_form import task_form_dialog

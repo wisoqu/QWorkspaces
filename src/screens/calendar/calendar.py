@@ -1,9 +1,6 @@
 """Экран календаря."""
 import flet as ft
 
-from _imports import *  # noqa: F401,F403
-
-
 def calendar_screen(page: ft.Page) -> ft.View:
     """Экран календаря (заглушка)."""
     content = ft.Container(
