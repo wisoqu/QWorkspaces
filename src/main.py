@@ -70,13 +70,19 @@ def main(page: ft.Page):
     def logout_click(e):
         clear_active_session()
         clear_current_user(page)
-        page.go("/")
-
-    def navigate_to(route: str):
-        page.go(route)
+        page.route = "/"
+        page.views.clear()
+        page.views.append(hello_screen(page))
+        page.update()
 
     def create_sidebar_item(icon, label, route):
         """Создает элемент навигации sidebar."""
+        def navigate(e):
+            page.route = route
+            page.views.clear()
+            page.views.append(build_authenticated_view(route))
+            page.update()
+        
         is_active = page.route == route
         color = COLOR_ACCENT if is_active else COLOR_TEXT_SECONDARY
 
@@ -90,7 +96,7 @@ def main(page: ft.Page):
             ),
             padding=12,
             border_radius=8,
-            on_click=lambda e: navigate_to(route),
+            on_click=navigate,
         )
 
     def build_authenticated_view(route: str) -> ft.View:
@@ -149,38 +155,39 @@ def main(page: ft.Page):
         """Обработчик изменения маршрута."""
         authenticated = restore_user_from_persistent_session()
         current_route = page.route or "/"
-        target_route = current_route
 
+        # Определяем целевой маршрут
         if not authenticated:
-            target_route = "/"
-        elif current_route == "/":
-            target_route = "/home"
-        elif current_route not in protected_routes:
-            target_route = "/home"
+            if current_route != "/":
+                page.route = "/"
+        else:
+            if current_route == "/":
+                page.route = "/home"
+            elif current_route not in protected_routes:
+                page.route = "/home"
 
-        if target_route != current_route:
-            page.go(target_route)
-            return
-
+        # Очищаем и строим views
         page.views.clear()
-
-        if target_route == "/":
+        final_route = page.route or "/"
+        
+        if final_route == "/":
             page.views.append(hello_screen(page))
         else:
-            page.views.append(build_authenticated_view(target_route))
+            page.views.append(build_authenticated_view(final_route))
 
         page.update()
 
     def view_pop(e):
-        if is_authenticated(page):
-            page.go("/home")
-        else:
-            page.go("/")
+        if len(page.views) > 1:
+            page.views.pop()
+            page.update()
 
     page.on_route_change = route_change
     page.on_view_pop = view_pop
-    page.go(page.route or "/")
-
+    
+    # Инициализируем маршрут
+    page.views.append(hello_screen(page))
+    page.update()
 
 if __name__ == "__main__":
     ft.run(main)

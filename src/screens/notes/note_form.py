@@ -77,4 +77,4 @@ def note_form_dialog(page: ft.Page, note_id: int | None = None, user_id: int = 1
         actions=buttons,
     )
 
-    page.show_dialog(dialog)
+    page.open(dialog)

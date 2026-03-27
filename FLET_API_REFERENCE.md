@@ -1,6 +1,6 @@
 # Flet API Reference for QWorkspaces
 
-Version checked locally: `flet 0.83.0`  
+Version checked locally: `flet 0.82.2`  
 Updated: `2026-03-27`
 
 This contract is strict:
@@ -32,12 +32,15 @@ This contract is strict:
 - `page.session.remove("key")`
 
 ### Controls
+- `ft.run(main)`
 - `ft.View(...)`
 - `ft.Container(...)`
 - `ft.Column(...)`
 - `ft.Row(...)`
 - `ft.Text(...)`
 - `ft.Icon(...)`
+- `ft.IconButton(...)`
+- `ft.Chip(...)`
 - `ft.Divider(...)`
 - `ft.TextField(...)`
 - `ft.Dropdown(...)`
@@ -48,15 +51,25 @@ This contract is strict:
 
 ### Control properties and enums used in the project
 - `control.content = value`
+- `control.value = value`
 - `control.visible = value`
+- `control.controls.clear()`
+- `control.controls.append(control)`
+- `control.on_click = handler`
+- `control.on_submit = handler`
+- `control.open = value`
 - `ft.FontWeight.BOLD`
 - `ft.TextAlign.CENTER`
 - `ft.CrossAxisAlignment.CENTER`
 - `ft.MainAxisAlignment.CENTER`
+- `ft.MainAxisAlignment.SPACE_BETWEEN`
+- `ft.MainAxisAlignment.END`
 - `ft.ThemeMode.DARK`
 - `ft.KeyboardType.EMAIL`
+- `ft.ScrollMode.AUTO`
 - `ft.Icons.*`
 - `ft.Alignment(x, y)`
+- `ft.Alignment.CENTER`
 
 ## DEPRECATED
 

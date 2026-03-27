@@ -16,18 +16,18 @@ def get_current_user_name(page: ft.Page, default: str = "Guest") -> str:
 
 def set_current_user(page: ft.Page, user_id: int, user_name: str) -> None:
     """Сохранить данные пользователя в сессии."""
-    page.session["user_id"] = user_id
-    page.session["user_name"] = user_name
+    page.session.set("user_id", user_id)
+    page.session.set("user_name", user_name)
 
 
 def clear_current_user(page: ft.Page) -> None:
     """Очистить данные пользователя из сессии."""
-    if "user_id" in page.session:
-        del page.session["user_id"]
-    if "user_name" in page.session:
-        del page.session["user_name"]
+    if page.session.contains_key("user_id"):
+        page.session.remove("user_id")
+    if page.session.contains_key("user_name"):
+        page.session.remove("user_name")
 
 
 def is_authenticated(page: ft.Page) -> bool:
     """Проверить, есть ли пользователь в сессии."""
-    return "user_id" in page.session
+    return page.session.contains_key("user_id")
