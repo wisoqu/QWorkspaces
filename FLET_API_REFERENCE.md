@@ -19,8 +19,7 @@ This contract is strict:
 - `page.go("/route")`
 - `page.on_route_change = handler`
 - `page.on_view_pop = handler`
-- `page.views.clear()`
-- `page.views.append(view)`
+- `page.views` (список представлений: `clear()`, `append()`, `pop()`, `len()`)
 - `page.update()`
 - `page.show_dialog(dialog)`
 - `page.pop_dialog()`
@@ -58,18 +57,62 @@ This contract is strict:
 - `control.on_click = handler`
 - `control.on_submit = handler`
 - `control.open = value`
+- `control.expand = value`
+- `control.spacing = value`
+- `control.width = value`
+- `control.height = value`
+- `control.bgcolor = value`
+- `control.border_radius = value`
+- `control.padding = value`
 - `ft.FontWeight.BOLD`
 - `ft.TextAlign.CENTER`
 - `ft.CrossAxisAlignment.CENTER`
+- `ft.CrossAxisAlignment.STRETCH`
 - `ft.MainAxisAlignment.CENTER`
 - `ft.MainAxisAlignment.SPACE_BETWEEN`
 - `ft.MainAxisAlignment.END`
+- `ft.MainAxisAlignment.START`
 - `ft.ThemeMode.DARK`
 - `ft.KeyboardType.EMAIL`
 - `ft.ScrollMode.AUTO`
+- `ft.ScrollMode.ALWAYS`
 - `ft.Icons.*`
 - `ft.Alignment(x, y)`
 - `ft.Alignment.CENTER`
+
+### Text (дополнительные параметры)
+- `ft.Text(weight=ft.FontWeight.BOLD)`
+- `ft.Text(weight=ft.FontWeight.W_500)`
+- `ft.Text(size=value)`
+- `ft.Text(color=value)`
+- `ft.Text(text_align=ft.TextAlign.CENTER)`
+
+### Icon (дополнительные параметры)
+- `ft.Icon(color=value, size=value)`
+
+### Divider (дополнительные параметры)
+- `ft.Divider(color=value, height=value)`
+
+### TextButton (дополнительные параметры)
+- `ft.TextButton(content, icon=..., on_click=...)`
+
+### Icons (конкретные значения используемые в проекте)
+- `ft.Icons.HOME`
+- `ft.Icons.TASK_ALT`
+- `ft.Icons.NOTE`
+- `ft.Icons.NOTES`
+- `ft.Icons.CALENDAR_MONTH`
+- `ft.Icons.SMART_TOY`
+- `ft.Icons.LOGOUT`
+- `ft.Icons.SEND`
+- `ft.Icons.ADD`
+- `ft.Icons.EDIT`
+- `ft.Icons.DELETE`
+- `ft.Icons.WORKSPACE_PREMIUM`
+- `ft.Icons.CHECK`
+- `ft.Icons.CLOSE`
+- `ft.Icons.MENU`
+- `ft.Icons.ACCOUNT_CIRCLE`
 
 ## DEPRECATED
 
