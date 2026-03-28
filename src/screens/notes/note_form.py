@@ -15,7 +15,7 @@ from schemas import validate_note
 from screens.tasks.task_form import CATEGORY_OPTIONS
 
 
-def note_form_dialog(page: ft.Page, note_id: int | None = None, user_id: int = 1, on_save: callable = None):
+def note_form_dialog(page: ft.Page, note_id: int | None, user_id: int, on_save: callable) -> None:
     """Диалог создания/редактирования заметки."""
     existing_note = get_note(note_id, user_id) if note_id else None
     note = existing_note or {}
@@ -43,7 +43,14 @@ def note_form_dialog(page: ft.Page, note_id: int | None = None, user_id: int = 1
         content = content_field.value.strip()
         category = category_dropdown.value
 
-        _, error = validate_note(title + " " + content)
+        # Валидируем title отдельно
+        if not title:
+            error_text.value = "Title cannot be empty"
+            page.update()
+            return
+
+        # Валидируем заметку через schema
+        _, error = validate_note(content)
         if error:
             error_text.value = error
             page.update()
@@ -76,4 +83,4 @@ def note_form_dialog(page: ft.Page, note_id: int | None = None, user_id: int = 1
         actions=buttons,
     )
 
-    page.open(dialog)
+    page.show_dialog(dialog)

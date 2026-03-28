@@ -7,6 +7,7 @@ from config import (
     COLOR_ACCENT,
     COLOR_BG_PRIMARY,
     COLOR_BG_SECONDARY,
+    COLOR_BG_TERTIARY,
     COLOR_CARD_BG,
     COLOR_DIVIDER,
     COLOR_INPUT_BG,
@@ -25,8 +26,8 @@ from config import (
 from database import get_notes, get_tasks
 from utils.session import get_current_user_id, get_current_user_name
 
-TASKS_ACCENT = "#4C8DFF"
-NOTES_ACCENT = "#F59E0B"
+TASKS_ACCENT = "#6EA7FF"
+NOTES_ACCENT = COLOR_ACCENT
 
 
 def _section_icon(icon: str, accent_color: str) -> ft.Container:
@@ -61,7 +62,7 @@ def _section_shell(
             ft.BoxShadow(
                 blur_radius=18,
                 spread_radius=0,
-                color="#00000020",
+                color="#00000026",
                 offset=ft.Offset(0, 8),
             )
         ],
@@ -226,9 +227,9 @@ def home_screen(page: ft.Page) -> ft.View:
         controls=[
             ft.Container(
                 padding=14,
-                bgcolor=COLOR_BG_PRIMARY,
                 border_radius=CARD_BORDER_RADIUS,
-                border=ft.Border.all(1, "#7C5CFF33"),
+                border=ft.Border.all(1, f"{COLOR_ACCENT}33"),
+                bgcolor=COLOR_BG_TERTIARY,
                 content=ft.Text(
                     "Use this side panel to sketch a plan, break a task into steps, or capture a thought before it gets lost.",
                     size=FONT_SIZE_SM,
@@ -356,7 +357,7 @@ def home_screen(page: ft.Page) -> ft.View:
                     padding=14,
                     bgcolor=COLOR_BG_PRIMARY,
                     border_radius=CARD_BORDER_RADIUS,
-                    border=ft.Border.all(1, "#7C5CFF22"),
+                    border=ft.Border.all(1, f"{COLOR_ACCENT}22"),
                     content=chat_column,
                 ),
                 ft.Container(
@@ -383,6 +384,7 @@ def home_screen(page: ft.Page) -> ft.View:
             notes_section,
         ],
         spacing=SPACING_LG,
+        scroll=ft.ScrollMode.AUTO,
         expand=True,
     )
 

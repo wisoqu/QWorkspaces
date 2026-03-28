@@ -29,7 +29,7 @@ STATUS_OPTIONS = [
 ]
 
 
-def task_form_dialog(page: ft.Page, task_id: int | None = None, user_id: int = 1, on_save: callable = None):
+def task_form_dialog(page: ft.Page, task_id: int | None, user_id: int, on_save: callable) -> None:
     """Диалог создания/редактирования задачи."""
     existing_task = get_task(task_id, user_id) if task_id else None
     task = existing_task or {}
@@ -124,4 +124,4 @@ def task_form_dialog(page: ft.Page, task_id: int | None = None, user_id: int = 1
         actions=buttons,
     )
 
-    page.open(dialog)
+    page.show_dialog(dialog)

@@ -65,6 +65,43 @@ class FakePage:
         self.pop_dialog()
 
 
+class ReadOnlyRoutePage:
+    def __init__(self):
+        self.session = FakeSession()
+        self._route = ""
+        self.views = []
+        self.on_route_change = None
+        self.on_view_pop = None
+        self.dialog = None
+        self.title = None
+        self.theme_mode = None
+        self.bgcolor = None
+        self.padding = None
+        self.updated = False
+        self.update_calls = 0
+
+    @property
+    def route(self):
+        return self._route
+
+    def update(self):
+        self.updated = True
+        self.update_calls += 1
+
+    def go(self, route):
+        self._route = route
+        if self.on_route_change:
+            self.on_route_change(type("RouteChangeEvent", (), {"route": route})())
+
+    def show_dialog(self, dialog):
+        self.dialog = dialog
+        dialog.open = True
+
+    def pop_dialog(self):
+        if self.dialog is not None:
+            self.dialog.open = False
+
+
 class TestAppImports:
     def test_import_main(self):
         from src import main
@@ -143,6 +180,46 @@ class TestFormsImports:
         from src.screens.notes.note_form import note_form_dialog
 
         assert note_form_dialog is not None
+
+    def test_task_form_opens_dialog(self, monkeypatch):
+        temp_dir = (Path("tests/.tmp") / uuid4().hex).resolve()
+        temp_dir.mkdir(parents=True, exist_ok=True)
+        monkeypatch.setenv("QWORKSPACES_DB_PATH", str(temp_dir / "app.db"))
+
+        from src.database import create_user, initialize_database
+        from src.screens.tasks.task_form import task_form_dialog
+
+        try:
+            initialize_database()
+            user_id = create_user(email="task@example.com", password_hash="hash")
+            page = FakePage()
+
+            task_form_dialog(page, task_id=None, user_id=user_id, on_save=lambda: None)
+
+            assert page.dialog is not None
+            assert page.dialog.open is True
+        finally:
+            shutil.rmtree(temp_dir, ignore_errors=True)
+
+    def test_note_form_opens_dialog(self, monkeypatch):
+        temp_dir = (Path("tests/.tmp") / uuid4().hex).resolve()
+        temp_dir.mkdir(parents=True, exist_ok=True)
+        monkeypatch.setenv("QWORKSPACES_DB_PATH", str(temp_dir / "app.db"))
+
+        from src.database import create_user, initialize_database
+        from src.screens.notes.note_form import note_form_dialog
+
+        try:
+            initialize_database()
+            user_id = create_user(email="note@example.com", password_hash="hash")
+            page = FakePage()
+
+            note_form_dialog(page, note_id=None, user_id=user_id, on_save=lambda: None)
+
+            assert page.dialog is not None
+            assert page.dialog.open is True
+        finally:
+            shutil.rmtree(temp_dir, ignore_errors=True)
 
 
 class TestAppStartup:
@@ -226,5 +303,31 @@ class TestAppStartup:
             assert not isinstance(page.views[0].controls[0].controls[1], ft.View)
             assert page.session.store.get("user_id") == user_id
             assert page.session.store.get("user_name") == "alice@example.com"
+        finally:
+            shutil.rmtree(temp_dir, ignore_errors=True)
+
+    def test_main_restores_session_with_read_only_route_page(self, monkeypatch):
+        temp_dir = (Path("tests/.tmp") / uuid4().hex).resolve()
+        temp_dir.mkdir(parents=True, exist_ok=True)
+        monkeypatch.setenv("QWORKSPACES_DB_PATH", str(temp_dir / "app.db"))
+
+        from src.database import create_user, initialize_database, save_active_session
+        from src.main import main
+
+        try:
+            initialize_database()
+            user_id = create_user(
+                email="readonly@example.com",
+                password_hash="hash",
+            )
+            save_active_session(user_id, "token-456")
+
+            page = ReadOnlyRoutePage()
+            main(page)
+
+            assert page.route == "/home"
+            assert len(page.views) == 1
+            assert page.views[0].route == "/home"
+            assert page.session.store.get("user_id") == user_id
         finally:
             shutil.rmtree(temp_dir, ignore_errors=True)

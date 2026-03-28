@@ -4,6 +4,7 @@ import flet as ft
 from config import (
     COLOR_ACCENT,
     COLOR_BG_PRIMARY,
+    COLOR_CARD_BG,
     COLOR_DIVIDER,
     COLOR_SIDEBAR_BG,
     COLOR_TEXT_PRIMARY,
@@ -44,6 +45,28 @@ def main(page: ft.Page):
         "/calendar": calendar_screen,
         "/agent": agent_screen,
     }
+    route_state = {"value": getattr(page, "route", "") or "/"}
+    redirecting = {"value": False}
+
+    def get_current_route() -> str:
+        return route_state["value"] or "/"
+
+    def set_route_value(route: str) -> None:
+        route_state["value"] = route
+        try:
+            setattr(page, "route", route)
+        except (AttributeError, TypeError):
+            # В актуальном Flet route может быть read-only.
+            pass
+
+    def navigate(route: str) -> None:
+        set_route_value(route)
+        if hasattr(page, "go"):
+            page.go(route)
+            return
+
+        if page.on_route_change:
+            page.on_route_change(type("RouteChangeEvent", (), {"route": route})())
 
     def restore_user_from_persistent_session() -> bool:
         if is_authenticated(page):
@@ -61,23 +84,21 @@ def main(page: ft.Page):
     def logout_click(e):
         clear_active_session()
         clear_current_user(page)
-        page.route = "/"
-        page.views.clear()
-        page.views.append(hello_screen(page))
-        page.update()
+        navigate("/")
 
     def create_sidebar_item(icon, label, route):
         """Создает элемент навигации sidebar."""
-        def navigate(e):
-            page.route = route
-            page.views.clear()
-            page.views.append(build_authenticated_view(route))
-            page.update()
-        
-        is_active = page.route == route
+        def handle_click(e):
+            navigate(route)
+
+        is_active = get_current_route() == route
         color = COLOR_ACCENT if is_active else COLOR_TEXT_SECONDARY
+        item_bgcolor = f"{COLOR_ACCENT}18" if is_active else "transparent"
+        item_border = ft.Border.all(1, f"{COLOR_ACCENT}33" if is_active else COLOR_DIVIDER)
 
         return ft.Container(
+            bgcolor=item_bgcolor,
+            border=item_border,
             content=ft.Row(
                 controls=[
                     ft.Icon(icon, color=color, size=20),
@@ -87,7 +108,7 @@ def main(page: ft.Page):
             ),
             padding=12,
             border_radius=8,
-            on_click=navigate,
+            on_click=handle_click,
         )
 
     def build_authenticated_view(route: str) -> ft.View:
@@ -107,6 +128,7 @@ def main(page: ft.Page):
         sidebar = ft.Container(
             width=SIDEBAR_WIDTH,
             bgcolor=COLOR_SIDEBAR_BG,
+            border=ft.Border(right=ft.BorderSide(1, COLOR_DIVIDER)),
             padding=20,
             content=ft.Column(
                 controls=[
@@ -124,7 +146,13 @@ def main(page: ft.Page):
                     create_sidebar_item(ft.Icons.CALENDAR_MONTH, "Calendar", "/calendar"),
                     create_sidebar_item(ft.Icons.SMART_TOY, "AI Agent", "/agent"),
                     ft.Container(expand=True),
-                    ft.TextButton("Logout", icon=ft.Icons.LOGOUT, on_click=logout_click),
+                    ft.Container(
+                        bgcolor=COLOR_CARD_BG,
+                        border=ft.Border.all(1, COLOR_DIVIDER),
+                        border_radius=12,
+                        padding=8,
+                        content=ft.TextButton("Logout", icon=ft.Icons.LOGOUT, on_click=logout_click),
+                    ),
                 ],
                 spacing=4,
                 expand=True,
@@ -145,22 +173,32 @@ def main(page: ft.Page):
     def route_change(e):
         """Обработчик изменения маршрута."""
         authenticated = restore_user_from_persistent_session()
-        current_route = page.route or "/"
+        requested_route = getattr(e, "route", None) or get_current_route()
+        final_route = requested_route
 
-        # Определяем целевой маршрут
         if not authenticated:
-            if current_route != "/":
-                page.route = "/"
+            final_route = "/"
         else:
-            if current_route == "/":
-                page.route = "/home"
-            elif current_route not in protected_routes:
-                page.route = "/home"
+            if requested_route == "/":
+                final_route = "/home"
+            elif requested_route not in protected_routes:
+                final_route = "/home"
 
-        # Очищаем и строим views
+        if (
+            requested_route != final_route
+            and hasattr(page, "go")
+            and not redirecting["value"]
+        ):
+            redirecting["value"] = True
+            try:
+                navigate(final_route)
+            finally:
+                redirecting["value"] = False
+            return
+
+        set_route_value(final_route)
         page.views.clear()
-        final_route = page.route or "/"
-        
+
         if final_route == "/":
             page.views.append(hello_screen(page))
         else:
@@ -171,13 +209,14 @@ def main(page: ft.Page):
     def view_pop(e):
         if len(page.views) > 1:
             page.views.pop()
+            set_route_value(page.views[-1].route or "/")
             page.update()
 
     page.on_route_change = route_change
     page.on_view_pop = view_pop
 
     # Инициализируем маршрут через route_change
-    route_change(type("RouteChangeEvent", (), {"route": page.route or "/"})())
+    route_change(type("RouteChangeEvent", (), {"route": get_current_route()})())
 
 if __name__ == "__main__":
     ft.run(main)

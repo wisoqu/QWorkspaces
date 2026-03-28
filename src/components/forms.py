@@ -2,15 +2,13 @@
 import flet as ft
 
 from config import (
+    COLOR_BG_TERTIARY,
     COLOR_TEXT_PRIMARY,
-    COLOR_TEXT_SECONDARY,
     COLOR_TEXT_ERROR,
-    COLOR_ACCENT,
     COLOR_INPUT_BG,
+    COLOR_ACCENT,
     FONT_SIZE_LG,
-    FONT_SIZE_BASE,
     FONT_SIZE_SM,
-    CARD_BORDER_RADIUS,
     INPUT_BORDER_RADIUS,
     SPACING_MD,
 )
@@ -91,11 +89,13 @@ def create_form_dialog(
     return ft.AlertDialog(
         open=True,
         modal=True,
+        bgcolor=COLOR_BG_TERTIARY,
         title=ft.Text(title, size=FONT_SIZE_LG, weight=ft.FontWeight.BOLD),
         content=ft.Column(
             controls=content_controls,
             spacing=SPACING_MD,
             tight=True,
+            scroll=ft.ScrollMode.AUTO,
         ),
         actions=actions,
         actions_alignment=ft.MainAxisAlignment.END,
@@ -104,14 +104,14 @@ def create_form_dialog(
 
 def create_cancel_button(on_click: callable) -> ft.TextButton:
     """Создает кнопку отмены."""
-    return ft.TextButton("Cancel", on_click=on_click)
+    return ft.TextButton("Cancel", on_click=on_click, style=ft.ButtonStyle(color=COLOR_TEXT_PRIMARY))
 
 
 def create_save_button(on_click: callable) -> ft.TextButton:
     """Создает кнопку сохранения."""
-    return ft.TextButton("Save", on_click=on_click)
+    return ft.TextButton("Save", on_click=on_click, style=ft.ButtonStyle(color=COLOR_ACCENT))
 
 
 def create_delete_button(on_click: callable) -> ft.TextButton:
     """Создает кнопку удаления."""
-    return ft.TextButton("Delete", on_click=on_click)
+    return ft.TextButton("Delete", on_click=on_click, style=ft.ButtonStyle(color=COLOR_TEXT_ERROR))

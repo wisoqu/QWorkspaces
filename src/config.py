@@ -1,33 +1,33 @@
 import flet as ft
 
-# UI Theme Colors - Modern Dark Theme
-COLOR_BG_PRIMARY = "#0B0F1A"  # Main background
-COLOR_BG_SECONDARY = "#151A28"  # Sidebar, cards
-COLOR_BG_TERTIARY = "#1E2538"  # Hover states
-COLOR_SIDEBAR_BG = "#111525"  # Sidebar background
+# UI Theme Colors - Premium Dark Palette
+COLOR_BG_PRIMARY = "#05070C"  # Main background
+COLOR_BG_SECONDARY = "#0D131D"  # Secondary surfaces
+COLOR_BG_TERTIARY = "#141D29"  # Hover and elevated states
+COLOR_SIDEBAR_BG = "#091019"  # Sidebar background
 
 # Accent colors
-COLOR_ACCENT = "#7C5CFF"  # Purple accent
-COLOR_ACCENT_HOVER = "#8F72FF"  # Lighter purple
-COLOR_ACCENT_DARK = "#5A42CC"  # Darker purple
+COLOR_ACCENT = "#C7A56A"  # Warm premium gold
+COLOR_ACCENT_HOVER = "#D9B983"  # Lighter gold
+COLOR_ACCENT_DARK = "#8E7245"  # Darker gold
 
 # Text colors
-COLOR_TEXT_PRIMARY = "#FFFFFF"  # Main text
-COLOR_TEXT_SECONDARY = "#A0A8B8"  # Muted text
-COLOR_TEXT_TERTIARY = "#6B7280"  # Subtle text
-COLOR_TEXT_ERROR = "#EF4444"  # Error messages
-COLOR_TEXT_SUCCESS = "#10B981"  # Success messages
+COLOR_TEXT_PRIMARY = "#F5F1E8"  # Main text
+COLOR_TEXT_SECONDARY = "#B3BAC6"  # Muted text
+COLOR_TEXT_TERTIARY = "#7D8795"  # Subtle text
+COLOR_TEXT_ERROR = "#E56852"  # Error messages
+COLOR_TEXT_SUCCESS = "#4FB38A"  # Success messages
 
 # UI elements
-COLOR_DIVIDER = "#FFFFFF14"  # Subtle divider
-COLOR_CARD_BG = "#1A1F30"  # Card background
-COLOR_INPUT_BG = "#0F1420"  # Input fields
+COLOR_DIVIDER = "#F5F1E814"  # Subtle divider
+COLOR_CARD_BG = "#111924"  # Card background
+COLOR_INPUT_BG = "#0A111A"  # Input fields
 
 # Status colors
-COLOR_STATUS_URGENT = "#EF4444"  # Red - urgent/overdue
-COLOR_STATUS_WARNING = "#F59E0B"  # Orange - warning
-COLOR_STATUS_NORMAL = "#10B981"  # Green - normal
-COLOR_STATUS_INFO = "#3B82F6"  # Blue - info
+COLOR_STATUS_URGENT = "#E56852"  # Red - urgent/overdue
+COLOR_STATUS_WARNING = "#D8A756"  # Amber - warning
+COLOR_STATUS_NORMAL = "#4FB38A"  # Green - normal
+COLOR_STATUS_INFO = "#6EA7FF"  # Blue - info
 
 # Dimensions
 SIDEBAR_WIDTH = 260
